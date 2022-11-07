@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Nav from './components/Nav'
 import SignUpForm from './components/SignUpForm'
 
 
@@ -7,10 +8,10 @@ function App() {
 
 
   useEffect(() => {
-    async function fetchStatesAndOccupations(){
+    async function fetchStatesAndOccupations() {
       let response = await fetch("https://frontend-take-home.fetchrewards.com/form")
       const resData = await response.json()
-      if(resData){
+      if (resData) {
         setData(resData)
       }
     }
@@ -20,7 +21,8 @@ function App() {
 
   return (
     <>
-    <SignUpForm occupations={data.occupations} states={data.states} />
+      <Nav />
+      <SignUpForm occupations={data.occupations} states={data.states} />
     </>
   );
 }

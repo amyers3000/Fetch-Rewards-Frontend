@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { signUp } from '../lib'
 import Error from './Error'
 import { Box, TextField, Grid, Container, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material'
+import Success from './Success'
 
 const SignUpForm = ({ occupations, states }) => {
     let [error, setError] = useState({ display: false, message: '' })
@@ -16,20 +16,28 @@ const SignUpForm = ({ occupations, states }) => {
 
     async function handleSubmit(e) {
         e.preventDefault()
-        let data = await signUp(credentials)
-        if(data){
+        const response = await fetch('https://frontend-take-home.fetchrewards.com/form', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(credentials)
+    })
+        console.log(response)
+        if(response.status === 201){
             setSuccess(true) 
         }else{
-            setError({ ...error, display: true, message: data.message })
+            setError({display: true, message: response.message })
         }
         console.log(success)
         
     }
 
     return (
-        <Container component='main' maxWidth='xs'>
-            {error.display && <Error setError={setError} error={error}/>}
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Container component='main' maxWidth='xs' sx={{pt:10}}>
+            {error.display && <Error error={error}/>}
+            {success && <Success/>}
+            <Box component="form" autoComplete='off' onSubmit={handleSubmit} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <TextField
