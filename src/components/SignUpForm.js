@@ -18,7 +18,6 @@ const SignUpForm = ({ occupations, states }) => {
     async function handleSubmit(e) {
         e.preventDefault()
         let response = await signUp(credentials)
-        console.log(response)
         if(response.ok){
             setSuccess(true)
         }else{

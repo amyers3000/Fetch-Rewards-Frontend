@@ -16,7 +16,6 @@ function App() {
       }
     }
     fetchStatesAndOccupations()
-    console.log(data)
   }, [])
 
   return (
