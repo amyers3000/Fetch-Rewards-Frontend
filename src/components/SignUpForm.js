@@ -18,18 +18,25 @@ const SignUpForm = ({ occupations, states }) => {
     async function handleSubmit(e) {
         e.preventDefault()
         let response = await signUp(credentials)
-        if(response.ok){
+        if (response.ok) {
             setSuccess(true)
-        }else{
-            setError({display: true, message: response.message })
+            setCredentials({
+                name: '',
+                email: '',
+                password: '',
+                occupation: '',
+                state: ''
+            })
+        } else {
+            setError({ display: true, message: response.message })
         }
-        
+
     }
 
     return (
-        <Container component='main' maxWidth='xs' sx={{pt:10}}>
-            {error.display && <Error error={error}/>}
-            {success && <Success/> }
+        <Container component='main' maxWidth='xs' sx={{ pt: 10 }}>
+            {error.display && <Error error={error} />}
+            {success && <Success />}
             <Box component="form" autoComplete='off' onSubmit={handleSubmit} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
