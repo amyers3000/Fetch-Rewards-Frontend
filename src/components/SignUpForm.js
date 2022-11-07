@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Error from './Error'
 import { Box, TextField, Grid, Container, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material'
 import Success from './Success'
+import { signUp } from '../lib'
 
 const SignUpForm = ({ occupations, states }) => {
     let [error, setError] = useState({ display: false, message: '' })
@@ -16,27 +17,20 @@ const SignUpForm = ({ occupations, states }) => {
 
     async function handleSubmit(e) {
         e.preventDefault()
-        const response = await fetch('https://frontend-take-home.fetchrewards.com/form', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(credentials)
-    })
+        let response = await signUp(credentials)
         console.log(response)
-        if(response.status === 201){
-            setSuccess(true) 
+        if(response.ok){
+            setSuccess(true)
         }else{
             setError({display: true, message: response.message })
         }
-        console.log(success)
         
     }
 
     return (
         <Container component='main' maxWidth='xs' sx={{pt:10}}>
             {error.display && <Error error={error}/>}
-            {success && <Success/>}
+            {success && <Success/> }
             <Box component="form" autoComplete='off' onSubmit={handleSubmit} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
