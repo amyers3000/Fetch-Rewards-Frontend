@@ -10,8 +10,8 @@ function App() {
   useEffect(() => {
     async function fetchStatesAndOccupations() {
       let response = await fetch("https://frontend-take-home.fetchrewards.com/form")
-      if (response.status === 201) {
-        const resData = await response.json()
+      const resData = await response.json()
+      if (resData) {
         setData(resData)
       }
     }
