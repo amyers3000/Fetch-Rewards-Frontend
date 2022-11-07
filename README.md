@@ -1,4 +1,14 @@
-# Getting Started with Create React App
+# How to use application
+1. Open https://fantastic-sunflower-568b8b.netlify.app
+2. Enter all information listed on form
+    -Full Name
+    -Email
+    -State
+    -Occupation
+    -Password
+3. Submit. Either a success or error message will appear
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
