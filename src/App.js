@@ -3,21 +3,24 @@ import SignUpForm from './components/SignUpForm'
 
 
 function App() {
-  const [data, setData] = useState()
+  const [data, setData] = useState({})
 
 
   useEffect(() => {
     async function fetchStatesAndOccupations(){
       let response = await fetch("https://frontend-take-home.fetchrewards.com/form")
       const resData = await response.json()
-      setData(resData)
+      if(resData){
+        setData(resData)
+      }
     }
     fetchStatesAndOccupations()
+    console.log(data)
   }, [])
 
   return (
     <>
-    <SignUpForm occupations={data.occupations} states={data.states}/>
+    <SignUpForm occupations={data.occupations} states={data.states} />
     </>
   );
 }
