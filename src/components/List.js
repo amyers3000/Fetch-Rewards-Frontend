@@ -1,13 +1,6 @@
 import { Select, MenuItem } from "@mui/material"
 
-const List = ({
-  list,
-  listId,
-  handleChange,
-  value,
-  format = (item) => item,
-  secondFormat = (item) => item
-}) => {
+function List({ list, listId, handleChange, value, format = (item) => item, secondFormat = (item) => item}){
   return (
     <Select
       id={listId}
