@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Error from './Error'
 import { Box, TextField, Grid, Container, Button, InputLabel, FormControl } from '@mui/material'
 import Success from './Success'
 import { apiCall } from '../lib'
 import List from './List'
 
-const SignUpForm = ({ occupations, states }) => {
+const SignUpForm = () => {
     let [error, setError] = useState({ display: false, message: '' })
     let [success, setSuccess] = useState(false)
+    const [data, setData] = useState({})
     let [credentials, setCredentials] = useState({
         name: '',
         email: '',
@@ -15,6 +16,13 @@ const SignUpForm = ({ occupations, states }) => {
         occupation: '',
         state: ''
     })
+
+    useEffect(() => {
+        apiCall('GET')
+          .then(res => res.json())
+          .then(response => setData(response))
+          .catch(e => console.log(e))
+    }, [])
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -85,7 +93,7 @@ const SignUpForm = ({ occupations, states }) => {
                         <FormControl required fullWidth>
                             <InputLabel id='state'>State</InputLabel>
                             <List
-                                list={states}
+                                list={data.states}
                                 format={({ name }) => name}
                                 secondFormat={({ abbreviation }) => abbreviation}
                                 listId="state"
@@ -99,7 +107,7 @@ const SignUpForm = ({ occupations, states }) => {
                         <FormControl required fullWidth>
                             <InputLabel id='occupation'>Occupation</InputLabel>
                             <List
-                                list={occupations}
+                                list={data.occupations}
                                 listId="occupation"
                                 handleChange={e => setCredentials({ ...credentials, occupation: e.target.value })}
                                 credentials={credentials}
