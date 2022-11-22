@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import Error from './Error'
-import { Box, TextField, Grid, Container, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material'
+import { Box, TextField, Grid, Container, Button, InputLabel, FormControl } from '@mui/material'
 import Success from './Success'
-import { signUp } from '../lib'
+import { apiCall } from '../lib'
+import List from './List'
 
 const SignUpForm = ({ occupations, states }) => {
     let [error, setError] = useState({ display: false, message: '' })
@@ -17,21 +18,26 @@ const SignUpForm = ({ occupations, states }) => {
 
     async function handleSubmit(e) {
         e.preventDefault()
-        let response = await signUp(credentials)
-        if (response.ok) {
-            setSuccess(true)
-            setCredentials({
-                name: '',
-                email: '',
-                password: '',
-                occupation: '',
-                state: ''
+        apiCall('POST', credentials)
+            .then(response => {
+                if (response.ok) {
+                    setSuccess(true)
+                    setCredentials({
+                        name: '',
+                        email: '',
+                        password: '',
+                        occupation: '',
+                        state: ''
+                    })
+                } else {
+                    setError({ display: true, message: response.message })
+                }
             })
-        } else {
-            setError({ display: true, message: response.message })
-        }
+            .catch(e => console.log(e))
 
     }
+
+   
 
     return (
         <Container component='main' maxWidth='xs' sx={{ pt: 10 }}>
@@ -78,44 +84,27 @@ const SignUpForm = ({ occupations, states }) => {
                     <Grid item xs={12} sm={6}>
                         <FormControl required fullWidth>
                             <InputLabel id='state'>State</InputLabel>
-                            <Select
-                                name='state'
-                                required
-                                fullWidth
-                                id='state'
-                                labelId='state'
-                                label='state'
+                            <List
+                                list={states}
+                                format={({ name }) => name}
+                                secondFormat={({ abbreviation }) => abbreviation}
+                                listId="state"
+                                handleChange={e => setCredentials({ ...credentials, state: e.target.value })}
                                 value={credentials.state}
-                                onChange={e => setCredentials({ ...credentials, state: e.target.value })}
-                            >
-                                {!!states && states.map((state, index) => (
-                                    <MenuItem key={index} value={state.name}>
-                                        {state.abbreviation}
-                                    </MenuItem>
-                                ))}
-                            </Select>
+                            />
                         </FormControl>
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
                         <FormControl required fullWidth>
                             <InputLabel id='occupation'>Occupation</InputLabel>
-                            <Select
-                                name='occupation'
-                                required
-                                fullWidth
-                                id='occupation'
-                                labelId='occupation'
-                                label='Occupation'
+                            <List
+                                list={occupations}
+                                listId="occupation"
+                                handleChange={e => setCredentials({ ...credentials, occupation: e.target.value })}
+                                credentials={credentials}
                                 value={credentials.occupation}
-                                onChange={e => setCredentials({ ...credentials, occupation: e.target.value })}
-                            >
-                                {!!occupations && occupations.map((occupation, index) => (
-                                    <MenuItem key={index} value={occupation}>
-                                        {occupation}
-                                    </MenuItem>
-                                ))}
-                            </Select>
+                            />
                         </FormControl>
                     </Grid>
                 </Grid>

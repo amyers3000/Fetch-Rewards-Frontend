@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { apiCall} from './lib'
 import Nav from './components/Nav'
 import SignUpForm from './components/SignUpForm'
 
@@ -8,14 +9,10 @@ function App() {
 
 
   useEffect(() => {
-    async function fetchStatesAndOccupations() {
-      let response = await fetch("https://frontend-take-home.fetchrewards.com/form")
-      const resData = await response.json()
-      if (resData) {
-        setData(resData)
-      }
-    }
-    fetchStatesAndOccupations()
+      apiCall('GET')
+        .then(res => res.json())
+        .then(response => setData(response))
+        .catch(e => console.log(e))
   }, [])
 
   return (
